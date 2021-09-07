@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Centinela.Core.DTOs
 {
@@ -9,8 +8,7 @@ namespace Centinela.Core.DTOs
         public string Correo { get; set; }
         public int EmpresaId { get; set; }
         public DateTime FechaLogin { get; set; }
-        public DateTime? FechaLoginAnterior { get; set; }
-        [Required]
+        public DateTime? FechaLoginAnterior { get; set; }        
         public string Observacion { get; set; }
         public string Nombres { get; set; }
         public string Apellidos { get; set; }
