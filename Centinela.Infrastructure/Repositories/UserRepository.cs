@@ -2,6 +2,7 @@
 using Centinela.Core.Interfaces;
 using Centinela.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -25,6 +26,17 @@ namespace Centinela.Infrastructure.Repositories
         {
             var user = await _context.Usuarios.FirstOrDefaultAsync(x => x.UsuarioId == id);
             return user;
+        }
+        public async Task Post(Usuario usuario)
+        {
+            //usuario.Password.PasswordUsuario = usuario.PasswordUsuario;
+            //usuario.Password.AddDate = DateTime.Now;           
+          
+            usuario.AddUserId = 14;
+            usuario.AddDate = DateTime.Now;          
+         
+            _context.Usuarios.Add(usuario);
+           await  _context.SaveChangesAsync();
         }
     }
 }
