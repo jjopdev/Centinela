@@ -2,6 +2,7 @@ using Centinela.Core.Interfaces;
 using Centinela.Infrastructure.Data;
 using Centinela.Infrastructure.Filters;
 using Centinela.Infrastructure.Repositories;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,8 @@ namespace Centinela.Api
             services.AddMvc(options =>
             {
                 options.Filters.Add<ValidationFilter>();
+            }).AddFluentValidation(options => {
+                options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
             });
         }
 
