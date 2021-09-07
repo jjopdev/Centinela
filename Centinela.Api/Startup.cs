@@ -1,5 +1,6 @@
 using Centinela.Core.Interfaces;
 using Centinela.Infrastructure.Data;
+using Centinela.Infrastructure.Filters;
 using Centinela.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +34,10 @@ namespace Centinela.Api
             services.AddDbContext<SALRContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("SALR")));
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<ValidationFilter>();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

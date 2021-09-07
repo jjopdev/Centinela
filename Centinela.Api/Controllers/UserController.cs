@@ -35,6 +35,7 @@ namespace Centinela.Api.Controllers
             var userDTO = _mapper.Map<UsuarioDTO>(user);
             return Ok(userDTO);
         }
+
         [HttpPost]
         public async Task<IActionResult> Post(UsuarioDTO userDTO)
         {
