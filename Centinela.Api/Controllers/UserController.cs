@@ -5,10 +5,12 @@ using Centinela.Core.Entities;
 using Centinela.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Centinela.Api.Controllers
 {
+    [Produces("application/json")]
     [Route("api/user")]
     [ApiController]
     public class UserController : ControllerBase
@@ -20,8 +22,13 @@ namespace Centinela.Api.Controllers
             _usuarioService = usuarioService;
             _mapper = mapper;
         }
-
-        [HttpGet]
+        /// <summary>
+        /// Obtener listado de todo los usuarios
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet(Name = nameof(Get))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApiResponse<IEnumerable<UsuarioDTO>>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Get()
         {
             var users = await _usuarioService.Get();
@@ -29,17 +36,29 @@ namespace Centinela.Api.Controllers
             var response = new ApiResponse<IEnumerable<UsuarioDTO>>(userDTO);
             return Ok(response);
         }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        /// <summary>
+        /// Obtener informacion de un usuario especifico
+        /// </summary>
+        /// <param name="correo"></param>
+        /// <returns></returns>       
+        [HttpGet("{correo}")]       
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApiResponse<UsuarioDTO>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Get(string correo)
         {
-            var user = await _usuarioService.Get(id);
+            var user = await _usuarioService.Get(correo);
             var userDTO = _mapper.Map<UsuarioDTO>(user);
             var response = new ApiResponse<UsuarioDTO>(userDTO);
             return Ok(response);
         }
-
+        /// <summary>
+        /// Ingresar nuevo usuario
+        /// </summary>
+        /// <param name="userDTO"></param>
+        /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApiResponse<UsuarioDTO>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Post(UsuarioDTO userDTO)
         {                      
             var user = _mapper.Map<Usuario>(userDTO);
@@ -49,7 +68,15 @@ namespace Centinela.Api.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        ///  Actualizar usuario por correo electronico
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="userDTO"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApiResponse<bool>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Put(int id, UsuarioDTO userDTO)
         {
             var user = _mapper.Map<Usuario>(userDTO);
@@ -58,11 +85,17 @@ namespace Centinela.Api.Controllers
             return Ok(response);
         
         }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        /// <summary>
+        /// Eliminar usuario por correo electronico
+        /// </summary>
+        /// <param name="correo"></param>
+        /// <returns></returns>
+        [HttpDelete("{correo}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ApiResponse<bool>))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Delete(string correo)
         {          
-            var response = new ApiResponse<bool>(await _usuarioService.Delete(id));
+            var response = new ApiResponse<bool>(await _usuarioService.Delete(correo));
             return Ok(response);
         }
     }

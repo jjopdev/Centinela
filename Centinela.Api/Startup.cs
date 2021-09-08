@@ -10,7 +10,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using System;
+using System.IO;
+using System.Reflection;
 
 namespace Centinela.Api
 {
@@ -37,6 +40,15 @@ namespace Centinela.Api
             options.UseSqlServer(Configuration.GetConnectionString("SALR")));
             services.AddTransient<IUsuarioService, UsuarioService>();
             services.AddTransient<IUserRepository, UserRepository>();
+
+            services.AddSwaggerGen(doc => 
+            {
+                doc.SwaggerDoc("v1", new OpenApiInfo { Title = "Centinela API", Version = "v1" });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                doc.IncludeXmlComments(xmlPath);
+            });
+
             services.AddMvc(options =>
             {
                 options.Filters.Add<ValidationFilter>();
@@ -54,7 +66,12 @@ namespace Centinela.Api
             }
 
             app.UseHttpsRedirection();
-
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json","Centinela API");
+                options.RoutePrefix = string.Empty;
+            });
             app.UseRouting();
 
             app.UseAuthorization();
