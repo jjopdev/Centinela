@@ -22,9 +22,9 @@ namespace Centinela.Infrastructure.Repositories
             return users;
         }
 
-        public async Task<Usuario> Get(int id)
+        public async Task<Usuario> Get(string id)
         {
-            var user = await _context.Usuarios.FirstOrDefaultAsync(x => x.UsuarioId == id);
+            var user = await _context.Usuarios.FirstOrDefaultAsync(x => x.Correo == id);
             return user;
         }
         public async Task Post(Usuario usuario)
@@ -42,7 +42,7 @@ namespace Centinela.Infrastructure.Repositories
 
         public async Task<bool> Put(Usuario usuario)
         {
-            var currentUser = await Get(usuario.UsuarioId);
+            var currentUser = await Get(usuario.Correo);
             //tabla usuario
             currentUser.ChgDate = DateTime.Now;            
             //tabla password
@@ -52,7 +52,7 @@ namespace Centinela.Infrastructure.Repositories
             return isDone > 0;
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool> Delete(string id)
         {
             var currentUser = await Get(id);
             _context.Usuarios.Remove(currentUser);

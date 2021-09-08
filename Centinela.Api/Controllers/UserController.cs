@@ -13,27 +13,27 @@ namespace Centinela.Api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUsuarioService _usuarioService;
         private readonly IMapper _mapper;
-        public UserController(IUserRepository userRepository, IMapper mapper)
+        public UserController(IUsuarioService usuarioService, IMapper mapper)
         {
-            _userRepository = userRepository;
+            _usuarioService = usuarioService;
             _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var users = await _userRepository.Get();
+            var users = await _usuarioService.Get();
             var userDTO = _mapper.Map<IEnumerable<UsuarioDTO>>(users);
             var response = new ApiResponse<IEnumerable<UsuarioDTO>>(userDTO);
             return Ok(response);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(string id)
         {
-            var user = await _userRepository.Get(id);
+            var user = await _usuarioService.Get(id);
             var userDTO = _mapper.Map<UsuarioDTO>(user);
             var response = new ApiResponse<UsuarioDTO>(userDTO);
             return Ok(response);
@@ -43,7 +43,7 @@ namespace Centinela.Api.Controllers
         public async Task<IActionResult> Post(UsuarioDTO userDTO)
         {                      
             var user = _mapper.Map<Usuario>(userDTO);
-            await _userRepository.Post(user);
+            await _usuarioService.Post(user);
             userDTO = _mapper.Map<UsuarioDTO>(user);
             var response = new ApiResponse<UsuarioDTO>(userDTO);
             return Ok(response);
@@ -54,15 +54,15 @@ namespace Centinela.Api.Controllers
         {
             var user = _mapper.Map<Usuario>(userDTO);
             user.UsuarioId = id;           
-            var response = new ApiResponse<bool>(await _userRepository.Put(user));
+            var response = new ApiResponse<bool>(await _usuarioService.Put(user));
             return Ok(response);
         
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {          
-            var response = new ApiResponse<bool>(await _userRepository.Delete(id));
+            var response = new ApiResponse<bool>(await _usuarioService.Delete(id));
             return Ok(response);
         }
     }

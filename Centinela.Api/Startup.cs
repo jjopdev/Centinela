@@ -1,4 +1,5 @@
 using Centinela.Core.Interfaces;
+using Centinela.Core.Services;
 using Centinela.Infrastructure.Data;
 using Centinela.Infrastructure.Filters;
 using Centinela.Infrastructure.Repositories;
@@ -34,6 +35,7 @@ namespace Centinela.Api
 
             services.AddDbContext<SALRContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("SALR")));
+            services.AddTransient<IUsuarioService, UsuarioService>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddMvc(options =>
             {
