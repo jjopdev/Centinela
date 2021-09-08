@@ -15,5 +15,6 @@ namespace Centinela.Core.DTOs
         public int TipoUsuario { get; set; }       
         public bool Activo { get; set; }
         public int Telefono { get; set; }
+        public virtual PasswordDTO PasswordUsuario { get; set; }
     }
 }

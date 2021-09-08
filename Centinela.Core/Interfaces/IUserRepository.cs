@@ -9,5 +9,7 @@ namespace Centinela.Core.Interfaces
         Task<IEnumerable<Usuario>> Get();
         Task<Usuario> Get(int id);
         Task Post(Usuario usuario);
+        Task<bool> Put(Usuario usuario);
+        Task<bool> Delete(int id);
     }
 }

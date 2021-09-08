@@ -10,6 +10,8 @@ namespace Centinela.Infrastructure.Mappings
         {
             CreateMap<Usuario, UsuarioDTO>();
             CreateMap<UsuarioDTO, Usuario>();
+            CreateMap<Password, PasswordDTO>();
+            CreateMap<PasswordDTO, Password>();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Centinela.Api.Response;
 using Centinela.Core.DTOs;
 using Centinela.Core.Entities;
 using Centinela.Core.Interfaces;
@@ -25,7 +26,8 @@ namespace Centinela.Api.Controllers
         {
             var users = await _userRepository.Get();
             var userDTO = _mapper.Map<IEnumerable<UsuarioDTO>>(users);
-            return Ok(userDTO);
+            var response = new ApiResponse<IEnumerable<UsuarioDTO>>(userDTO);
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
@@ -33,15 +35,35 @@ namespace Centinela.Api.Controllers
         {
             var user = await _userRepository.Get(id);
             var userDTO = _mapper.Map<UsuarioDTO>(user);
-            return Ok(userDTO);
+            var response = new ApiResponse<UsuarioDTO>(userDTO);
+            return Ok(response);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post(UsuarioDTO userDTO)
-        {
+        {                      
             var user = _mapper.Map<Usuario>(userDTO);
             await _userRepository.Post(user);
-            return Ok(user);
+            userDTO = _mapper.Map<UsuarioDTO>(user);
+            var response = new ApiResponse<UsuarioDTO>(userDTO);
+            return Ok(response);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, UsuarioDTO userDTO)
+        {
+            var user = _mapper.Map<Usuario>(userDTO);
+            user.UsuarioId = id;           
+            var response = new ApiResponse<bool>(await _userRepository.Put(user));
+            return Ok(response);
+        
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {          
+            var response = new ApiResponse<bool>(await _userRepository.Delete(id));
+            return Ok(response);
         }
     }
 }

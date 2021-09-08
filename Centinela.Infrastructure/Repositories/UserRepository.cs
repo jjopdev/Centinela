@@ -29,14 +29,37 @@ namespace Centinela.Infrastructure.Repositories
         }
         public async Task Post(Usuario usuario)
         {
-            //usuario.Password.PasswordUsuario = usuario.PasswordUsuario;
-            //usuario.Password.AddDate = DateTime.Now;           
-          
-            usuario.AddUserId = 14;
-            usuario.AddDate = DateTime.Now;          
-         
+            //tabla usuario
+            usuario.AddDate = DateTime.Now;
+            usuario.Activo = true;
+            //tabla password
+            usuario.PasswordUsuario.AddUserId = 14;           
+            usuario.PasswordUsuario.AddDate = DateTime.Now;
+            usuario.PasswordUsuario.Activo = true;
             _context.Usuarios.Add(usuario);
-           await  _context.SaveChangesAsync();
+            await  _context.SaveChangesAsync();
         }
+
+        public async Task<bool> Put(Usuario usuario)
+        {
+            var currentUser = await Get(usuario.UsuarioId);
+            //tabla usuario
+            currentUser.ChgDate = DateTime.Now;            
+            //tabla password
+            currentUser.PasswordUsuario.ChgUserId = 14;
+            currentUser.PasswordUsuario.ChgDate = DateTime.Now;
+            int isDone = await _context.SaveChangesAsync();
+            return isDone > 0;
+        }
+
+        public async Task<bool> Delete(int id)
+        {
+            var currentUser = await Get(id);
+            _context.Usuarios.Remove(currentUser);
+            int isDone = await _context.SaveChangesAsync();
+            return isDone > 0;
+        }
+
+       
     }
 }
