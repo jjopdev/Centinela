@@ -10,12 +10,12 @@ namespace Centinela.Infrastructure.Validators
     {
         public UsuarioValidator()
         {
-            RuleFor(user => user.Observacion)
-                .NotNull()
-                .Length(10,15);
-            RuleFor(user => user.Nombres)
-                .NotNull()
-                .Length(10, 15);
+            //RuleFor(user => user.Observacion)
+            //    .NotNull()
+            //    .Length(10,15);
+            //RuleFor(user => user.Nombres)
+            //    .NotNull()
+            //    .Length(10, 15);
 
         }
     }

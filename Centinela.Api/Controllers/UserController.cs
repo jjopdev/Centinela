@@ -3,6 +3,7 @@ using Centinela.Api.Response;
 using Centinela.Core.DTOs;
 using Centinela.Core.Entities;
 using Centinela.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Net;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Centinela.Api.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/user")]
     [ApiController]
@@ -23,7 +25,7 @@ namespace Centinela.Api.Controllers
             _mapper = mapper;
         }
         /// <summary>
-        /// Obtener listado de todo los usuarios
+        /// Obtener listado de todos los usuarios
         /// </summary>
         /// <returns></returns>
         [HttpGet(Name = nameof(Get))]
