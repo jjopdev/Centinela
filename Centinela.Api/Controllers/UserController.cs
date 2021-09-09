@@ -39,7 +39,7 @@ namespace Centinela.Api.Controllers
             return Ok(response);
         }
         /// <summary>
-        /// Obtener informacion de un usuario especifico
+        /// Obtener informacion de un usuario especifico por correo electronico
         /// </summary>
         /// <param name="correo"></param>
         /// <returns></returns>       

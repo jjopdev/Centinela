@@ -1,4 +1,6 @@
-﻿using Centinela.Core.DTOs;
+﻿using AutoMapper;
+using Centinela.Core.DTOs;
+using Centinela.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -15,33 +17,39 @@ namespace Centinela.Api.Controllers
     public class TokenController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-       
+        private readonly IUsuarioService _usuarioService;
+        private readonly IMapper _mapper;
 
-        public TokenController(IConfiguration configuration)
+        public TokenController(IConfiguration configuration, IUsuarioService usuarioService, IMapper mapper)
         {
-            _configuration = configuration;        
+            _configuration = configuration;
+            _usuarioService = usuarioService;
+            _mapper = mapper;
         }
 
+        
         [HttpPost]
-        public async Task<IActionResult> Authentication(UsuarioDTO login)
+        public async Task<IActionResult> Authentication(LoginDTO credenciales)
         {
             //if it is a valid user
-            var validation = await IsValidUser(login);
-            if (validation)
+            var userDTO = await IsValidUser(credenciales.Correo, credenciales.Password);
+            if (userDTO != null)
             {
-                var token = GenerateToken();
+                var token = GenerateToken(userDTO);
                 return Ok(new { token });
             }
 
             return NotFound();
         }
 
-        private async Task<bool> IsValidUser(UsuarioDTO login)
+        private async Task<UsuarioDTO> IsValidUser(string correo, string password)
         {
-            return true;
+            var user = await _usuarioService.Get(correo);          
+            var userDTO = _mapper.Map<UsuarioDTO>(user);            
+            return userDTO;
         }
 
-        private string GenerateToken()
+        private string GenerateToken(UsuarioDTO usuario)
         {
             //Header
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:SecretKey"]));
@@ -51,9 +59,10 @@ namespace Centinela.Api.Controllers
             //Claims
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, "Juan Jose"),
-                new Claim("User", "jortiz"),
-                new Claim(ClaimTypes.Role, "Administrador"),
+                new Claim(ClaimTypes.Name, $"{usuario.Nombres} {usuario.Apellidos}"),
+                new Claim("User", usuario.Correo),
+                new Claim("Empresa", usuario.EmpresaId.ToString()),
+                new Claim(ClaimTypes.Role, usuario.TipoUsuario.ToString()),
             };
 
             //Payload
