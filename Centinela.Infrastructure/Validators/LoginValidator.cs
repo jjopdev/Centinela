@@ -8,10 +8,13 @@ namespace Centinela.Infrastructure.Validators
         public LoginValidator()
         {
             RuleFor(user => user.Correo)
+                .Cascade(CascadeMode.Stop)
                 .NotNull()
-                .EmailAddress();
+                .EmailAddress()
+                .Matches(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
             RuleFor(user => user.Password)
-                .NotNull();                
+                .Cascade(CascadeMode.Stop)
+                .NotNull();                         
 
         }
     }
