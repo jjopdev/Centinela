@@ -77,7 +77,7 @@ namespace Centinela.Api.Controllers
 
             var token = new JwtSecurityToken(header, payload);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return new JwtSecurityTokenHandler().WriteToken(token); 
            
         }
     }

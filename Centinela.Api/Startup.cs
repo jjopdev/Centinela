@@ -91,8 +91,8 @@ namespace Centinela.Api
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json","Centinela API");
-                options.RoutePrefix = string.Empty;
+                options.SwaggerEndpoint("/test/swagger/v1/swagger.json","Centinela API");
+                //options.RoutePrefix = string.Empty;
             });
             app.UseRouting();
             app.UseAuthentication();
