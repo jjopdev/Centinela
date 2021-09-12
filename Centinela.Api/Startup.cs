@@ -32,6 +32,7 @@ namespace Centinela.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers().AddNewtonsoftJson(options =>
             {
@@ -77,6 +78,8 @@ namespace Centinela.Api
             }).AddFluentValidation(options => {
                 options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
             });
+
+            services.AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,8 +94,9 @@ namespace Centinela.Api
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/test/swagger/v1/swagger.json","Centinela API");
-                //options.RoutePrefix = string.Empty;
+                //options.SwaggerEndpoint("/test/swagger/v1/swagger.json","Centinela API");
+                options.SwaggerEndpoint("swagger/v1/swagger.json", "Centinela API");
+                options.RoutePrefix = string.Empty;
             });
             app.UseRouting();
             app.UseAuthentication();

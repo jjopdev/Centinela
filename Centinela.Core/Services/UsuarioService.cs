@@ -28,11 +28,11 @@ namespace Centinela.Core.Services
 
         public async Task Post(Usuario usuario)
         {
-            var user = await _userRepository.Get(usuario.Correo);
-            if (user != null)
-            {
-                throw new Exception("El usuario ya existe en el sistema...");
-            }
+            //var user = await _userRepository.Get(usuario.Correo);
+            //if (user != null)
+            //{
+            //    throw new Exception("El usuario ya existe en el sistema...");
+            //}
             await _userRepository.Post(usuario);
         }
 
